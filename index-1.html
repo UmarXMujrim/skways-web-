@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skyways — Bus Service, Renala Khurd</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dusk:#101A2E;
+    --panel:#16233D;
+    --panel-line:#28374f;
+    --gold:#E8A33D;
+    --cloud:#EDEEF0;
+    --steel:#8b97a8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--dusk);
+    color:var(--cloud);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Big Shoulders Display',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    font-weight:700;
+    line-height:0.95;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  @media (max-width:640px){.wrap{padding:0 20px;}}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:3px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  /* HEADER */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(16,26,46,0.9);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--panel-line);
+  }
+  .header-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 0;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Big Shoulders Display',sans-serif;
+    font-size:26px;font-weight:800;letter-spacing:0.03em;
+    color:var(--cloud);
+  }
+  .logo .dot{color:var(--gold);}
+  nav{display:flex;align-items:center;gap:32px;}
+  nav a.navlink{
+    font-size:14px;font-weight:500;color:var(--steel);
+    transition:color .15s ease;
+  }
+  nav a.navlink:hover{color:var(--cloud);}
+  .call-btn{
+    background:var(--gold);color:var(--dusk);
+    font-weight:600;font-size:14px;
+    padding:11px 20px;border-radius:3px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .call-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(232,163,61,0.25);}
+  @media (max-width:800px){
+    nav .navlink{display:none;}
+  }
+
+  /* HERO */
+  .hero{
+    padding:76px 0 90px;
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  @media (max-width:920px){
+    .hero{grid-template-columns:1fr;padding:48px 0 60px;}
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;letter-spacing:0.14em;
+    color:var(--gold);text-transform:uppercase;
+    margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{
+    content:'';width:22px;height:1px;background:var(--gold);
+  }
+  .hero h1{
+    font-size:clamp(42px,6vw,74px);
+    color:var(--cloud);
+    margin-bottom:22px;
+  }
+  .hero h1 span{color:var(--gold);}
+  .hero p.lede{
+    font-size:18px;line-height:1.6;color:var(--steel);
+    max-width:46ch;margin-bottom:34px;
+  }
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--gold);color:var(--dusk);
+    font-weight:600;font-size:15px;
+    padding:15px 26px;border-radius:3px;border:none;cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(232,163,61,0.28);}
+  .btn-ghost{
+    border:1px solid var(--panel-line);color:var(--cloud);
+    font-weight:600;font-size:15px;
+    padding:15px 26px;border-radius:3px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .btn-ghost:hover{border-color:var(--gold);background:rgba(232,163,61,0.06);}
+
+  /* SPLIT-FLAP BOARD */
+  .board{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:6px;
+    padding:22px;
+  }
+  .board-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-bottom:14px;margin-bottom:14px;
+    border-bottom:1px solid var(--panel-line);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:0.1em;color:var(--steel);
+    text-transform:uppercase;
+  }
+  .board-head .live{
+    color:var(--gold);display:flex;align-items:center;gap:6px;
+  }
+  .live-dot{
+    width:6px;height:6px;border-radius:50%;background:var(--gold);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;} 50%{opacity:0.35;}
+  }
+  .board-row{
+    display:grid;
+    grid-template-columns:70px 1fr 90px;
+    gap:14px;align-items:center;
+    padding:13px 4px;
+    border-bottom:1px dashed var(--panel-line);
+  }
+  .board-row:last-child{border-bottom:none;}
+  .board-row .code{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;color:var(--gold);
+  }
+  .flap-cell{
+    perspective:400px;
+    overflow:hidden;
+  }
+  .flap-text{
+    font-family:'Big Shoulders Display',sans-serif;
+    font-weight:600;font-size:19px;letter-spacing:0.02em;
+    color:var(--cloud);
+    text-transform:uppercase;
+    display:inline-block;
+  }
+  .board-row .status{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;text-align:right;color:var(--steel);
+  }
+  .board-row .status.ready{color:var(--gold);}
+
+  /* SECTION SHARED */
+  section{padding:88px 0;}
+  .section-head{
+    max-width:60ch;margin-bottom:52px;
+  }
+  .section-head .eyebrow{margin-bottom:14px;}
+  .section-head h2{
+    font-size:clamp(32px,4vw,46px);
+    color:var(--cloud);
+  }
+  .section-head p{
+    color:var(--steel);font-size:16px;line-height:1.6;margin-top:16px;
+  }
+
+  /* FLEET */
+  .fleet-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+  }
+  @media (max-width:900px){.fleet-grid{grid-template-columns:1fr;}}
+  .fleet-card{
+    background:var(--panel);border:1px solid var(--panel-line);
+    border-radius:6px;padding:28px;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .fleet-card:hover{border-color:var(--gold);transform:translateY(-3px);}
+  .fleet-card .num{
+    font-family:'IBM Plex Mono',monospace;color:var(--gold);
+    font-size:13px;margin-bottom:16px;display:block;
+  }
+  .fleet-card h3{
+    font-size:26px;color:var(--cloud);margin-bottom:10px;
+  }
+  .fleet-card p{color:var(--steel);font-size:14.5px;line-height:1.6;margin-bottom:16px;}
+  .fleet-card .meta{
+    display:flex;justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;
+    color:var(--steel);border-top:1px solid var(--panel-line);padding-top:14px;
+  }
+  .fleet-card .meta strong{color:var(--cloud);font-weight:600;}
+
+  /* STATUS STRIP (reliability, styled as flight-status badges) */
+  .status-strip{
+    background:var(--panel);
+    border-top:1px solid var(--panel-line);
+    border-bottom:1px solid var(--panel-line);
+  }
+  .status-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);
+  }
+  @media (max-width:800px){.status-grid{grid-template-columns:repeat(2,1fr);}}
+  .status-item{
+    padding:36px 28px;
+    border-right:1px solid var(--panel-line);
+  }
+  .status-item:last-child{border-right:none;}
+  @media (max-width:800px){
+    .status-item:nth-child(2n){border-right:none;}
+    .status-item{border-bottom:1px solid var(--panel-line);}
+  }
+  .status-item .tag{
+    display:inline-block;font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.08em;color:var(--gold);
+    border:1px solid var(--gold);border-radius:2px;
+    padding:3px 8px;margin-bottom:14px;
+  }
+  .status-item .big{
+    font-family:'Big Shoulders Display',sans-serif;
+    font-size:38px;font-weight:700;color:var(--cloud);
+  }
+  .status-item .label{color:var(--steel);font-size:13.5px;margin-top:6px;}
+
+  /* PROCESS */
+  .process{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+    position:relative;
+  }
+  @media (max-width:900px){.process{grid-template-columns:1fr;gap:28px;}}
+  .process-step{
+    padding-right:24px;position:relative;
+  }
+  .process-step:not(:last-child)::after{
+    content:'';position:absolute;top:8px;right:0;
+    width:1px;height:calc(100% - 16px);
+    background:var(--panel-line);
+  }
+  @media (max-width:900px){.process-step:not(:last-child)::after{display:none;}}
+  .process-step .step-code{
+    font-family:'IBM Plex Mono',monospace;color:var(--gold);
+    font-size:13px;margin-bottom:12px;
+  }
+  .process-step h3{
+    font-size:22px;color:var(--cloud);margin-bottom:10px;
+  }
+  .process-step p{color:var(--steel);font-size:14.5px;line-height:1.6;}
+
+  /* TESTIMONIALS */
+  .testi-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+  }
+  @media (max-width:900px){.testi-grid{grid-template-columns:1fr;}}
+  .testi-card{
+    background:var(--panel);border:1px solid var(--panel-line);
+    border-radius:6px;padding:26px;
+  }
+  .testi-card .route-code{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);
+    margin-bottom:16px;display:block;
+  }
+  .testi-card p.quote{
+    font-size:15.5px;line-height:1.65;color:var(--cloud);margin-bottom:18px;
+  }
+  .testi-card .who{color:var(--steel);font-size:13px;font-family:'IBM Plex Mono',monospace;}
+
+  /* MAP */
+  .map-block{
+    display:grid;grid-template-columns:1fr 1.3fr;gap:32px;align-items:stretch;
+  }
+  @media (max-width:900px){.map-block{grid-template-columns:1fr;}}
+  .map-info{
+    background:var(--panel);border:1px solid var(--panel-line);
+    border-radius:6px;padding:28px;display:flex;flex-direction:column;justify-content:center;
+  }
+  .map-info .tag{
+    display:inline-block;font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:0.08em;color:var(--gold);
+    border:1px solid var(--gold);border-radius:2px;
+    padding:3px 8px;margin-bottom:16px;width:fit-content;
+  }
+  .map-info h3{font-size:26px;color:var(--cloud);margin-bottom:12px;}
+  .map-info p{color:var(--steel);font-size:14.5px;line-height:1.65;margin-bottom:20px;}
+  .map-frame{
+    border:1px solid var(--panel-line);border-radius:6px;overflow:hidden;
+    min-height:320px;
+  }
+  .map-frame iframe{width:100%;height:100%;min-height:320px;border:0;display:block;filter:grayscale(0.15) contrast(1.05);}
+
+  /* CTA / FOOTER */
+  .cta-section{
+    background:var(--panel);
+    border-top:1px solid var(--panel-line);
+  }
+  .cta-inner{
+    display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;
+  }
+  @media (max-width:900px){.cta-inner{grid-template-columns:1fr;}}
+  .cta-inner h2{font-size:clamp(30px,4vw,42px);color:var(--cloud);margin-bottom:16px;}
+  .cta-inner > div > p{color:var(--steel);font-size:16px;line-height:1.6;max-width:44ch;}
+  .contact-list{margin-top:28px;display:flex;flex-direction:column;gap:14px;}
+  .contact-list .row{display:flex;gap:12px;font-size:15px;}
+  .contact-list .row .k{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);
+    min-width:78px;padding-top:2px;
+  }
+  form{
+    background:var(--dusk);border:1px solid var(--panel-line);
+    border-radius:6px;padding:28px;
+  }
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+  @media (max-width:520px){.form-row{grid-template-columns:1fr;}}
+  label{
+    display:block;font-size:12px;font-family:'IBM Plex Mono',monospace;
+    color:var(--steel);margin-bottom:6px;letter-spacing:0.04em;
+  }
+  input,select,textarea{
+    width:100%;background:var(--panel);border:1px solid var(--panel-line);
+    border-radius:3px;padding:11px 12px;color:var(--cloud);font-family:'Inter',sans-serif;
+    font-size:14px;
+  }
+  input:focus,select:focus,textarea:focus{
+    outline:none;border-color:var(--gold);
+  }
+  textarea{resize:vertical;min-height:70px;}
+  .field{margin-bottom:14px;}
+  .form-submit{
+    width:100%;margin-top:4px;
+  }
+  .form-note{font-size:12px;color:var(--steel);margin-top:12px;}
+
+  footer{
+    padding:32px 0;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:12px;
+    color:var(--steel);font-size:13px;
+  }
+  footer .foot-links{display:flex;gap:22px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-inner">
+    <div class="logo">SKYWAYS<span class="dot">.</span></div>
+    <nav>
+      <a class="navlink" href="#fleet">Fleet</a>
+      <a class="navlink" href="#reliability">Reliability</a>
+      <a class="navlink" href="#process">How it works</a>
+      <a class="navlink" href="#reviews">Reviews</a>
+      <a class="navlink" href="#location">Location</a>
+      <a class="call-btn" href="tel:+923006953552">Call 0300-6953552</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap" style="display:contents;">
+    <div>
+      <div class="eyebrow">Renala Khurd — daily coach service</div>
+      <h1>Top quality buses.<br>Every <span>route</span>, on time.</h1>
+      <p class="lede">Skyways runs daily coaches between Renala Khurd, Sahiwal, Okara, Burewala, Okara Cantt, Pattoki and Gamber — clean, well-maintained buses with experienced drivers, booking open 24/7.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="document.getElementById('quote').scrollIntoView({behavior:'smooth'})">Book your seat</button>
+        <a class="btn-ghost" href="https://wa.me/923006953552" target="_blank" rel="noopener">WhatsApp us</a>
+      </div>
+    </div>
+
+    <div class="board" aria-label="Today's route departures">
+      <div class="board-head">
+        <span>Route board — today</span>
+        <span class="live"><span class="live-dot"></span> live</span>
+      </div>
+      <div id="flapboard"></div>
+    </div>
+  </div>
+</section>
+
+<section class="status-strip" id="reliability">
+  <div class="wrap status-grid">
+    <div class="status-item">
+      <span class="tag">OPEN</span>
+      <div class="big">24/7</div>
+      <div class="label">Booking office open around the clock, every day of the week</div>
+    </div>
+    <div class="status-item">
+      <span class="tag">ROUTES</span>
+      <div class="big">7</div>
+      <div class="label">Renala Khurd, Sahiwal, Okara, Burewala, Okara Cantt, Pattoki, Gamber</div>
+    </div>
+    <div class="status-item">
+      <span class="tag">FLEET</span>
+      <div class="big">A/C</div>
+      <div class="label">Air-conditioned coaches with cushioned, reclining seating</div>
+    </div>
+    <div class="status-item">
+      <span class="tag">SUPPORT</span>
+      <div class="big">WhatsApp</div>
+      <div class="label">Book, confirm, or ask questions directly on WhatsApp</div>
+    </div>
+  </div>
+</section>
+
+<section id="fleet">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The fleet</div>
+      <h2>Top quality buses, kept that way</h2>
+      <p>Every bus is cleaned, inspected and fuelled before it leaves the Renala Khurd office. Choose by trip type — our team will confirm the right bus when you book.</p>
+    </div>
+    <div class="fleet-grid">
+      <div class="fleet-card">
+        <span class="num">01 / A/C COACH</span>
+        <h3>Air-Conditioned Coach</h3>
+        <p>Cushioned, reclining seats and full air-conditioning for long routes like Sahiwal and Burewala, where comfort matters most.</p>
+        <div class="meta"><span>Seating <strong>Reclining</strong></span><span>Best for <strong>Long routes</strong></span></div>
+      </div>
+      <div class="fleet-card">
+        <span class="num">02 / STANDARD</span>
+        <h3>Standard Route Bus</h3>
+        <p>Reliable, well-maintained buses for the shorter, frequent runs to Okara, Okara Cantt and Pattoki.</p>
+        <div class="meta"><span>Seating <strong>Cushioned</strong></span><span>Best for <strong>Daily commute</strong></span></div>
+      </div>
+      <div class="fleet-card">
+        <span class="num">03 / EXPRESS</span>
+        <h3>Express Service</h3>
+        <p>Fewer stops and a direct run for passengers heading straight through to Gamber or connecting onward.</p>
+        <div class="meta"><span>Seating <strong>Priority</strong></span><span>Best for <strong>Direct travel</strong></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="quality">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Why passengers choose Skyways</div>
+      <h2>Built for a comfortable, safe journey</h2>
+      <p>Quality isn't just the paint job — it's what's maintained underneath, who's driving, and how the trip actually feels.</p>
+    </div>
+    <div class="fleet-grid">
+      <div class="fleet-card">
+        <span class="num">QUALITY / 01</span>
+        <h3>Clean &amp; Well-Maintained</h3>
+        <p>Every bus is washed and checked before departure — engine, tyres, brakes and interior — so breakdowns and delays stay rare.</p>
+      </div>
+      <div class="fleet-card">
+        <span class="num">QUALITY / 02</span>
+        <h3>Experienced Drivers</h3>
+        <p>Our drivers know these routes well and drive carefully, keeping passenger safety and comfort as the first priority on every trip.</p>
+      </div>
+      <div class="fleet-card">
+        <span class="num">QUALITY / 03</span>
+        <h3>Comfortable Seating</h3>
+        <p>Cushioned seating with proper legroom, so even the longer runs between Renala Khurd and Sahiwal feel easy on passengers.</p>
+      </div>
+      <div class="fleet-card">
+        <span class="num">QUALITY / 04</span>
+        <h3>On-Time Departures</h3>
+        <p>Buses leave the Renala Khurd office on schedule, so passengers connecting onward at Okara, Pattoki or Burewala aren't left waiting.</p>
+      </div>
+      <div class="fleet-card">
+        <span class="num">QUALITY / 05</span>
+        <h3>Fair, Fixed Fares</h3>
+        <p>The fare you're quoted at booking is the fare you pay — no extra charges added once you're already on board.</p>
+      </div>
+      <div class="fleet-card">
+        <span class="num">QUALITY / 06</span>
+        <h3>Always Reachable</h3>
+        <p>Our booking office and WhatsApp line stay open 24 hours a day, so you can book, ask, or confirm a seat any time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Booking, plainly</div>
+      <h2>Four steps to a confirmed coach</h2>
+    </div>
+    <div class="process">
+      <div class="process-step">
+        <div class="step-code">STEP 01</div>
+        <h3>Tell us the trip</h3>
+        <p>Headcount, pickup point, destination, and date. Takes about two minutes in the form below.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-code">STEP 02</div>
+        <h3>Get a fixed quote</h3>
+        <p>Our office replies within the hour with seat availability and a fixed fare — no surprise fees later.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-code">STEP 03</div>
+        <h3>Confirm the coach</h3>
+        <p>We assign the vehicle and driver 48 hours out and send you both names before the trip.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-code">STEP 04</div>
+        <h3>Board on schedule</h3>
+        <p>Your driver arrives 15 minutes early, and your bus departs Renala Khurd right on schedule.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Passengers &amp; regulars</div>
+      <h2>What riders say after the trip</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <span class="route-code">ROUTE — RENALA KHURD TO SAHIWAL</span>
+        <p class="quote">I travel this route every week for work. The bus is always clean and the driver never runs late, even in the evening.</p>
+        <div class="who">— Regular passenger, Sahiwal route</div>
+      </div>
+      <div class="testi-card">
+        <span class="route-code">ROUTE — OKARA TO BUREWALA</span>
+        <p class="quote">Booked my seat on WhatsApp in two minutes and got a reply right away. The bus arrived exactly on time.</p>
+        <div class="who">— Passenger, Burewala route</div>
+      </div>
+      <div class="testi-card">
+        <span class="route-code">ROUTE — PATTOKI TO GAMBER</span>
+        <p class="quote">Comfortable seats and a careful driver made the trip easy, even with the whole family travelling together.</p>
+        <div class="who">— Family traveller, Gamber route</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="location">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Find us</div>
+      <h2>Our booking office in Renala Khurd</h2>
+      <p>Walk in any time — the office stays open 24 hours a day, every day of the week.</p>
+    </div>
+    <div class="map-block">
+      <div class="map-info">
+        <span class="tag">OFFICE</span>
+        <h3>Skyways Booking Office</h3>
+        <p>Renala bypass west, near Rao CNG, Basti Rahim Bakhsh, Renala Khurd, 56130.<br>Open 24/7 for bookings, ticket collection, and route enquiries.</p>
+        <p>Call 0300-6953552 or WhatsApp 0300-6953552 if you'd like directions before visiting.</p>
+        <a class="btn-ghost" style="width:fit-content;" href="https://www.google.com/maps/search/?api=1&query=Skyways+booking+office+Renala+Khurd&query_place_id=ChIJz-pbEYgNGDkRngMRpbyWU8w" target="_blank" rel="noopener">Open in Google Maps</a>
+      </div>
+      <div class="map-frame">
+        <iframe
+          src="https://www.google.com/maps?q=Skyways+booking+office,+Renala+Khurd&ll=30.8848418,73.6125792&z=16&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Skyways booking office location in Renala Khurd">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="quote">
+  <div class="wrap cta-inner">
+    <div>
+      <div class="eyebrow">Book your seat</div>
+      <h2>Reserve a seat or ask about a route</h2>
+      <p>Call, WhatsApp, or fill in the form below — our office in Renala Khurd is open 24 hours a day, every day.</p>
+      <div class="contact-list">
+        <div class="row"><span class="k">CALL</span><span>0300-6953552</span></div>
+        <div class="row"><span class="k">WHATSAPP</span><span><a href="https://wa.me/923006953552" target="_blank" rel="noopener" style="color:var(--cloud);text-decoration:underline;">0300-6953552</a></span></div>
+        <div class="row"><span class="k">OFFICE</span><span>Renala Khurd booking office — open 24/7</span></div>
+        <div class="row"><span class="k">ROUTES</span><span>Renala Khurd, Sahiwal, Okara, Burewala, Okara Cantt, Pattoki, Gamber</span></div>
+      </div>
+    </div>
+    <form onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" type="text" required placeholder="Jordan Lee">
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input id="phone" type="tel" required placeholder="(555) 555-5555">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="headcount">Seats needed</label>
+          <input id="headcount" type="number" min="1" required placeholder="2">
+        </div>
+        <div class="field">
+          <label for="date">Travel date</label>
+          <input id="date" type="date" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="trip">Route</label>
+        <input id="trip" type="text" required placeholder="e.g. Renala Khurd to Sahiwal">
+      </div>
+      <div class="field">
+        <label for="notes">Notes (optional)</label>
+        <textarea id="notes" placeholder="Anything we should know — luggage, timing preference, etc."></textarea>
+      </div>
+      <button class="btn-primary form-submit" type="submit">Send booking request</button>
+      <p class="form-note" id="formNote">We'll confirm your seat by call or WhatsApp shortly.</p>
+    </form>
+  </div>
+</section>
+
+<footer class="wrap">
+  <span>© 2026 Skyways Bus Service — Renala Khurd</span>
+  <div class="foot-links">
+    <a href="#fleet">Fleet</a>
+    <a href="#quality">Why us</a>
+    <a href="#location">Location</a>
+    <a href="#quote">Book a seat</a>
+  </div>
+</footer>
+
+<script>
+  // Split-flap route board showing today's active routes out of Renala Khurd.
+  const destinations = [
+    { code: 'RK-01', name: 'Sahiwal', status: 'BOARDING', ready:true },
+    { code: 'RK-02', name: 'Okara', status: 'ON TIME' },
+    { code: 'RK-03', name: 'Burewala', status: 'ON TIME' },
+    { code: 'RK-04', name: 'Okara Cantt', status: 'ON TIME' },
+    { code: 'RK-05', name: 'Pattoki', status: 'ON TIME' },
+    { code: 'RK-06', name: 'Gamber', status: 'ON TIME' },
+  ];
+
+  const board = document.getElementById('flapboard');
+  destinations.forEach(d => {
+    const row = document.createElement('div');
+    row.className = 'board-row';
+    row.innerHTML = `
+      <span class="code">${d.code}</span>
+      <span class="flap-cell"><span class="flap-text">${d.name}</span></span>
+      <span class="status ${d.ready ? 'ready' : ''}">${d.status}</span>
+    `;
+    board.appendChild(row);
+  });
+
+  function handleSubmit(e){
+    e.preventDefault();
+    const note = document.getElementById('formNote');
+    note.textContent = "Request received — our team will call or WhatsApp you shortly.";
+    note.style.color = 'var(--gold)';
+    e.target.querySelectorAll('input, textarea').forEach(el => el.disabled = true);
+    e.target.querySelector('button').disabled = true;
+    e.target.querySelector('button').textContent = 'Sent';
+  }
+</script>
+
+</body>
+</html>
